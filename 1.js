@@ -49,7 +49,7 @@
             setTimeout(() => {
                 notifyOwner(messageToSend);
                 lastNotificationTime = Date.now(); // 更新上次通知时间
-            }, 2000);  // 延迟2秒，模拟通知过程
+            }, 7000);  // 延迟2秒，模拟通知过程
         }
 
         function notifyOwner(messageToSend) {
@@ -67,7 +67,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 1000) {
+                if (data.code === 6000) {
                     showInfoBox('success', '已成功通知车主前来移车，请稍后等待！');
                 } else {
                     showInfoBox('error', `通知发送失败: ${data.msg || '未知错误'}`);
