@@ -1,4 +1,283 @@
-    .call-btn-container {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 15px;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden; /* 禁止网页拖动 */
+        }
+
+        /* 白天模式和夜间模式 */
+        body.light-mode {
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        body.dark-mode {
+            background-color: #181818;
+            color: #f0f0f0;
+        }
+
+        /* 容器 */
+        .container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            min-width: 320px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* 夜间模式下容器 */
+        .dark-mode .container {
+            background-color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 动态标题 */
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: titleAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes titleAnimation {
+            0% { transform: translateY(0); color: #28a745; }
+            50% { transform: translateY(-10px); color: #007bff; }
+            100% { transform: translateY(0); color: #28a745; }
+        }
+
+        /* 输入框 */
+        .input-box-textarea {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            color: #333;
+            resize: none;
+            min-height: 160px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            outline: none;
+            overflow: hidden;
+        }
+
+        /* 夜间模式下输入框 */
+        body.dark-mode .input-box-textarea {
+            background: #444;
+            color: #f0f0f0;
+            border: 1px solid #666;
+        }
+
+        .input-box-textarea:focus {
+            border-color: #5d9bff;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(93, 155, 255, 0.5);
+        }
+
+        .input-box-textarea.dark-mode:focus {
+            background-color: #555;
+            border-color: #66ccff;
+            box-shadow: 0 0 8px rgba(102, 204, 255, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.5s, transform 0.3s, box-shadow 0.5s, filter 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 通知车主按钮背景修改为浅蓝色渐变 */
+        .notify-btn {
+            background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
+            background-size: 200% 100%;
+            transition: background-color 0.3s;
+        }
+
+        .notify-btn:hover {
+            background: linear-gradient(45deg, #3399ff, #66ccff);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            filter: brightness(1.2);
+        }
+
+        /* 夜间模式按钮 */
+        .dark-mode .notify-btn {
+            background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
+        }
+
+        /* 拨打电话滑动按钮 */
+        .call-btn-container {
+            width: 100%;
+            height: 50px;
+            background-color: #ddd;
+            border-radius: 25px;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .call-btn-text {
+            position: absolute;
+            left: 15px;
+            font-size: 16px;
+            color: #555;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .call-btn-slider {
+            width: 50px;
+            height: 100%;
+            background: linear-gradient(45deg, #17a2b8, #00bcd4);
+            border-radius: 25px;
+            position: absolute;
+            left: 0;
+            cursor: pointer;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .call-btn-container.active .call-btn-slider {
+            transform: translateX(100%);
+            width: 100%;
+        }
+
+        .call-btn-container.active .call-btn-text {
+            opacity: 0;
+        }
+
+        /* 信息框 */
+        .info-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            width: 300px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* 夜间模式下信息框 */
+        .dark-mode .info-box {
+            background-color: #333;
+            color: #f0f0f0;
+        }
+
+        .info-box.show {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 1s forwards;
+        }
+
+        .info-box .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .info-box .icon.success::before {
+            content: '✓';
+            color: #28a745;
+        }
+
+        .info-box .icon.error::before {
+            content: '✖';
+            color: #dc3545;
+        }
+
+        .info-box .message {
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* 夜间模式下提示信息 */
+        .dark-mode .info-box .message {
+            color: #f0f0f0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* 夜间模式下关闭按钮 */
+        .dark-mode .close-btn {
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* 夜间模式切换按钮 */
+        .toggle-dark-mode-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: #f0f0f0; /* 更明显的颜色 */
+            transition: color 0.3s;
+        }
+
+        .dark-mode .toggle-dark-mode-btn {
+            color: #f0f0f0;
+        }
+
+.call-btn-container {
     position: relative;
     width: 250px;
     height: 50px;
