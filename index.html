@@ -471,9 +471,9 @@
     <script>
         let isDarkMode = false;
         let lastNotificationTime = 0; // 记录上次通知的时间
-        const phone = '13427166676';
-        const wxpusherAppToken = 'AT_EY8OSouPa4xoqYs95cudvV0sjndKqe5z';
-        const wxpusherUIDs = ['UID_wgAfuCaFC8aSQK9lK6EM66xZewb2'];
+        const phone = '17608462601';
+        const wxpusherAppToken = 'AT_42SgggbnnXdnm3gzQPiYcbShLGTRYFgh';
+        const wxpusherUIDs = ['UID_kJP2XxI6RxcVtjt4W3Ve1lRW5Zzp'];
 
         // 切换夜间模式
         function toggleDarkMode() {
@@ -504,8 +504,8 @@
         // 通知车主
         function notifyOwnerWithCustomMessage() {
             const currentTime = Date.now();
-            if (currentTime - lastNotificationTime < 120000) { // 检查是否达到2分钟限制
-                const remainingTime = 120000 - (currentTime - lastNotificationTime);
+            if (currentTime - lastNotificationTime < 12) { // 检查是否达到2分钟限制120000
+                const remainingTime = 12 - (currentTime - lastNotificationTime);
                 const minutes = Math.floor(remainingTime / 60000);
                 const seconds = Math.floor((remainingTime % 60000) / 1000);
                 showInfoBox('error', `请等待 ${minutes} 分 ${seconds} 秒 后再通知车主。`);
