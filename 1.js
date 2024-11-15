@@ -67,7 +67,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 6000) {
+                if (data.code ===8000) {
                     showInfoBox('success', '已成功通知车主前来移车，请稍后等待！');
                 } else {
                     showInfoBox('error', `通知发送失败: ${data.msg || '未知错误'}`);
