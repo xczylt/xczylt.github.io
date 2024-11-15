@@ -27,7 +27,7 @@
             setTimeout(() => {
                 infoBox.classList.remove('show');
                 infoBox.classList.add('hide');
-            }, 3000); // 3秒后隐藏
+            }, 6000); // 3秒后隐藏
         }
 
         // 通知车主
