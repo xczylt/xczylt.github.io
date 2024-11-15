@@ -6,7 +6,6 @@
 
 
 
-
 // 显示信息框
 function showInfoBox(type, message) {
     const infoBox = document.getElementById('infoBox');
@@ -21,25 +20,15 @@ function showInfoBox(type, message) {
 
     let displayTime = 5000;
     if (type ==='success' && message === '正在通知车主... 1') {
-        displayTime = 2000; // 展示时间调整为2秒
+        displayTime = 2000;
     }
     setTimeout(() => {
         infoBox.classList.remove('show');
         infoBox.classList.add('hide');
         if (type ==='success' && message === '正在通知车主... 1') {
             setTimeout(() => {
-                // 提前1秒显示“已成功通知车主前来移车，请稍后等待！”提示（假设通知成功）
-                const lastMessage = document.getElementById('infoBoxMessage').textContent;
-                if (lastMessage === '正在通知车主... 1') {
-                    const messageToSend = document.getElementById('customMessage').value.trim();
-                    const actualMessage = messageToSend.length > 0? messageToSend : "您好，有人需要您挪车，请及时处理。 6";
-                    notifyOwner(actualMessage).then((success) => {
-                        if (success) {
-                            showInfoBox('success', '已成功通知车主前来移车，请稍后等待！ 11');
-                        }
-                    });
-                }
-            }, 1000); 
+                showInfoBox('success', '已成功通知车主前来移车，请稍后等待！ 11');
+            }, 0);
         }
     }, displayTime);
 }
@@ -47,7 +36,7 @@ function showInfoBox(type, message) {
 // 通知车主
 function notifyOwnerWithCustomMessage() {
     const currentTime = Date.now();
-    if (currentTime - lastNotificationTime < 120000) { // 检查是否达到2分钟限制120000
+    if (currentTime - lastNotificationTime < 120000) {
         const remainingTime = 120000 - (currentTime - lastNotificationTime);
         const minutes = Math.floor(remainingTime / 60000);
         const seconds = Math.floor((remainingTime % 60000) / 1000);
@@ -58,8 +47,10 @@ function notifyOwnerWithCustomMessage() {
     const customMessage = document.getElementById('customMessage').value.trim();
     const messageToSend = customMessage.length > 0? customMessage : "您好，有人需要您挪车，请及时处理。 6";
 
-    notifyOwner(messageToSend);
-    showInfoBox('success', '正在通知车主... 1');
+    // 先访问接口发送通知
+    notifyOwner(messageToSend).then(() => {
+        showInfoBox('success', '正在通知车主... 1');
+    });
 }
 
 function notifyOwner(messageToSend) {
@@ -78,14 +69,12 @@ function notifyOwner(messageToSend) {
 .then(response => response.json())
 .then(data => {
         if (data.code === 1000) {
-            return true;
+            return;
         } else {
             showInfoBox('error', `通知发送失败: ${data.msg || '未知错误 0'}`);
-            return false;
         }
     })
 .catch(error => {
         showInfoBox('error', `通知发送失败，请稍后重试。错误: ${error.message} 02`);
-        return false;
     });
 }
