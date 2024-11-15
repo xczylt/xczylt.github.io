@@ -37,14 +37,14 @@
                 const remainingTime = 120000 - (currentTime - lastNotificationTime);
                 const minutes = Math.floor(remainingTime / 60000);
                 const seconds = Math.floor((remainingTime % 60000) / 1000);
-                showInfoBox('error', `请等待 ${minutes} 分 ${seconds} 秒 后再通知车主。`);
+                showInfoBox('error', `请等待 ${minutes} 分 ${seconds} 秒 后再通知车主。 3`);
                 return;
             }
 
             const customMessage = document.getElementById('customMessage').value.trim();
-            const messageToSend = customMessage.length > 0 ? customMessage : "您好，有人需要您挪车，请及时处理。";
+            const messageToSend = customMessage.length > 0 ? customMessage : "您好，有人需要您挪车，请及时处理。 6";
 
-            showInfoBox('success', '正在通知车主...');
+            showInfoBox('success', '正在通知车主... 1');
 
             setTimeout(() => {
                 notifyOwner(messageToSend);
@@ -68,13 +68,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.code ===8000) {
-                    showInfoBox('success', '已成功通知车主前来移车，请稍后等待！');
+                    showInfoBox('success', '已成功通知车主前来移车，请稍后等待！ 11');
                 } else {
-                    showInfoBox('error', `通知发送失败: ${data.msg || '未知错误'}`);
+                    showInfoBox('error', `通知发送失败: ${data.msg || '未知错误 0'}`);
                 }
             })
             .catch(error => {
-                showInfoBox('error', `通知发送失败，请稍后重试。错误: ${error.message}`);
+                showInfoBox('error', `通知发送失败，请稍后重试。错误: ${error.message} 02`);
             });
         }
 
