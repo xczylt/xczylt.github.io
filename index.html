@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>通知车主挪车</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Arial', sans-serif;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 15px;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden; /* 禁止网页拖动 */
+        }
+
+        /* 白天模式和夜间模式 */
+        body.light-mode {
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        body.dark-mode {
+            background-color: #181818;
+            color: #f0f0f0;
+        }
+
+        /* 容器 */
+        .container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            min-width: 320px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* 夜间模式下容器 */
+        .dark-mode .container {
+            background-color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 动态标题 */
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: titleAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes titleAnimation {
+            0% { transform: translateY(0); color: #28a745; }
+            50% { transform: translateY(-10px); color: #007bff; }
+            100% { transform: translateY(0); color: #28a745; }
+        }
+
+        /* 输入框 */
+        .input-box-textarea {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            color: #333;
+            resize: none;
+            min-height: 160px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            outline: none;
+            overflow: hidden;
+        }
+
+        /* 夜间模式下输入框 */
+        body.dark-mode .input-box-textarea {
+            background: #444;
+            color: #f0f0f0;
+            border: 1px solid #666;
+        }
+
+        .input-box-textarea:focus {
+            border-color: #5d9bff;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(93, 155, 255, 0.5);
+        }
+
+        .input-box-textarea.dark-mode:focus {
+            background-color: #555;
+            border-color: #66ccff;
+            box-shadow: 0 0 8px rgba(102, 204, 255, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.5s, transform 0.3s, box-shadow 0.5s, filter 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 通知车主按钮背景修改为浅蓝色渐变 */
+        .notify-btn {
+            background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
+            background-size: 200% 100%;
+            transition: background-color 0.3s;
+        }
+
+        .notify-btn:hover {
+            background: linear-gradient(45deg, #3399ff, #66ccff);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            filter: brightness(1.2);
+        }
+
+        /* 夜间模式按钮 */
+        .dark-mode .notify-btn {
+            background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
+        }
+
+        /* 拨打电话滑动按钮 */
+        .call-btn-container {
+            width: 100%;
+            height: 50px;
+            background-color: #ddd;
+            border-radius: 25px;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .call-btn-text {
+            position: absolute;
+            left: 15px;
+            font-size: 16px;
+            color: #555;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .call-btn-slider {
+            width: 50px;
+            height: 100%;
+            background: linear-gradient(45deg, #17a2b8, #00bcd4);
+            border-radius: 25px;
+            position: absolute;
+            left: 0;
+            cursor: pointer;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .call-btn-container.active .call-btn-slider {
+            transform: translateX(100%);
+            width: 100%;
+        }
+
+        .call-btn-container.active .call-btn-text {
+            opacity: 0;
+        }
+
+        /* 信息框 */
+        .info-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            width: 300px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* 夜间模式下信息框 */
+        .dark-mode .info-box {
+            background-color: #333;
+            color: #f0f0f0;
+        }
+
+        .info-box.show {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 1s forwards;
+        }
+
+        .info-box .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .info-box .icon.success::before {
+            content: '✓';
+            color: #28a745;
+        }
+
+        .info-box .icon.error::before {
+            content: '✖';
+            color: #dc3545;
+        }
+
+        .info-box .message {
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* 夜间模式下提示信息 */
+        .dark-mode .info-box .message {
+            color: #f0f0f0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* 夜间模式下关闭按钮 */
+        .dark-mode .close-btn {
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* 夜间模式切换按钮 */
+        .toggle-dark-mode-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: #f0f0f0; /* 更明显的颜色 */
+            transition: color 0.3s;
+        }
+
+        .dark-mode .toggle-dark-mode-btn {
+            color: #f0f0f0;
+        }
+
+    </style>
+    <style>
+    .call-btn-container {
+    position: relative;
+    width: 250px;
+    height: 50px;
+    background-color: #333;
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.call-btn-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    background-color: gray;
+    border-radius: 25px;
+    transition: transform 0.3s ease, width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrows-container {
+    display: flex;
+    justify-content: space-between;
+    width: 50px;
+}
+
+.arrow-left, .arrow-right {
+    font-size: 24px;
+    color: white;
+    opacity: 0;
+    animation: slide-arrows 1s infinite alternate;
+}
+
+/* 动画效果：箭头左右移动 */
+@keyframes slide-arrows {
+    0% {
+        transform: translateX(-10px);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+}
+
+/* 当按钮处于活动状态时，改变箭头显示 */
+.call-btn-container.active .arrow-left {
+    animation: none; /* 停止动画 */
+    opacity: 0;
+}
+
+.call-btn-container.active .arrow-right {
+    animation: none; /* 停止动画 */
+    opacity: 0;
+}
+
+.call-btn-container.active .call-btn-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+    /* 拨打电话滑动按钮 */
+    .call-btn-container {
+        width: 100%;
+        height: 50px;
+        background-color: #ddd;
+        border-radius: 25px;
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        transition: background-color 0.3s ease;
+    }
+
+    .call-btn-text {
+        position: absolute;
+        left: 15px;
+        font-size: 16px;
+        color: #555;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    .call-btn-slider {
+        width: 50px;
+        height: 100%;
+        background: linear-gradient(45deg, #17a2b8, #00bcd4);
+        border-radius: 25px;
+        position: absolute;
+        left: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease, width 0.3s ease;
+    }
+
+    .call-btn-container.active .call-btn-slider {
+        transform: translateX(100%);
+        width: 100%;
+    }
+
+    .call-btn-container.active .call-btn-text {
+        opacity: 0;
+    }
+
+    /* 明显的光波发光效果 */
+    .call-btn-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(0, 188, 212, 0.6) 10%, rgba(0, 188, 212, 0) 50%);
+        border-radius: 25px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        animation: lightWave 1.5s infinite;
+    }
+
+    .call-btn-container.active::before {
+        opacity: 1;
+    }
+
+    /* 光波的动画效果 */
+    @keyframes lightWave {
+        0% {
+            transform: scale(1);
+            opacity: 0.6;
+            box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.8;
+            box-shadow: 0 0 40px rgba(0, 188, 212, 1), 0 0 80px rgba(0, 188, 212, 0.6);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.6;
+            box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
+        }
+    }
+
+    /* 增加按钮发光效果 */
+    .call-btn-container.active .call-btn-slider {
+        box-shadow: 0 0 15px rgba(0, 188, 212, 1), 0 0 30px rgba(0, 188, 212, 0.8);
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>通知车主挪车</h1>
+        <textarea id="customMessage" class="input-box-textarea" placeholder="可留下联系方式，方便车主联系您！可留空，默认发送信息给车主尽快前来移车！"></textarea>
+
+        <div class="button-group">
+            <button class="notify-btn" id="notifyBtn" onclick="notifyOwnerWithCustomMessage()">通知车主</button>
+            <div class="call-btn-container" id="callBtnContainer">
+                <span class="call-btn-text">向右滑动拨打电话</span>
+                <div class="call-btn-slider" id="callBtnSlider"></div>
+                  <span class="arrow-left">←</span>
+                  <span class="arrow-right">→</span>
+            </div>
+        </div>
+    </div>
+    <button class="toggle-dark-mode-btn" onclick="toggleDarkMode()">🌙</button>
+
+    <div class="info-box" id="infoBox">
+        <span class="close-btn" onclick="closeInfoBox()">×</span>
+        <div class="icon" id="infoBoxIcon"></div>
+        <div class="message" id="infoBoxMessage"></div>
+    </div>
+
+    <script>
+        let isDarkMode = false;
+        let lastNotificationTime = 0; // 记录上次通知的时间
+        const phone = '13427166676';
+        const wxpusherAppToken = 'AT_EY8OSouPa4xoqYs95cudvV0sjndKqe5z';
+        const wxpusherUIDs = ['UID_wgAfuCaFC8aSQK9lK6EM66xZewb2'];
+
+        // 切换夜间模式
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            const button = document.querySelector('.toggle-dark-mode-btn');
+            button.textContent = isDarkMode ? '☀️' : '🌙';
+        }
+
+        // 显示信息框
+        function showInfoBox(type, message) {
+            const infoBox = document.getElementById('infoBox');
+            const infoBoxIcon = document.getElementById('infoBoxIcon');
+            const infoBoxMessage = document.getElementById('infoBoxMessage');
+            
+            infoBox.classList.remove('hide');
+            infoBox.classList.add('show');
+            infoBoxIcon.classList.remove('success', 'error');
+            infoBoxIcon.classList.add(type);
+            infoBoxMessage.textContent = message;
+
+            setTimeout(() => {
+                infoBox.classList.remove('show');
+                infoBox.classList.add('hide');
+            }, 3000); // 3秒后隐藏
+        }
+
+        // 通知车主
+        function notifyOwnerWithCustomMessage() {
+            const currentTime = Date.now();
+            if (currentTime - lastNotificationTime < 120000) { // 检查是否达到2分钟限制
+                const remainingTime = 120000 - (currentTime - lastNotificationTime);
+                const minutes = Math.floor(remainingTime / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
+                showInfoBox('error', `请等待 ${minutes} 分 ${seconds} 秒 后再通知车主。`);
+                return;
+            }
+
+            const customMessage = document.getElementById('customMessage').value.trim();
+            const messageToSend = customMessage.length > 0 ? customMessage : "您好，有人需要您挪车，请及时处理。";
+
+            showInfoBox('success', '正在通知车主...');
+
+            setTimeout(() => {
+                notifyOwner(messageToSend);
+                lastNotificationTime = Date.now(); // 更新上次通知时间
+            }, 2000);  // 延迟2秒，模拟通知过程
+        }
+
+        function notifyOwner(messageToSend) {
+            const bodyContent = {
+                appToken: wxpusherAppToken,
+                content: `${messageToSend}`,
+                contentType: 1,
+                uids: wxpusherUIDs
+            };
+
+            fetch("https://wxpusher.zjiecode.com/api/send/message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyContent)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 1000) {
+                    showInfoBox('success', '已成功通知车主前来移车，请稍后等待！');
+                } else {
+                    showInfoBox('error', `通知发送失败: ${data.msg || '未知错误'}`);
+                }
+            })
+            .catch(error => {
+                showInfoBox('error', `通知发送失败，请稍后重试。错误: ${error.message}`);
+            });
+        }
+
+        // 拨打电话
+        function callOwner() {
+            window.location.href = `tel:${phone}`;
+        }
+
+        // 监听滑块滑动（触摸支持）
+        const callBtnContainer = document.getElementById('callBtnContainer');
+        const callBtnSlider = document.getElementById('callBtnSlider');
+
+        let startX;
+        let isSliding = false;
+
+
+// 触摸开始
+callBtnContainer.addEventListener('touchstart', (event) => {
+    startX = event.touches[0].clientX;
+    isSliding = true;
+    callBtnContainer.classList.remove('active');
+    callBtnSlider.style.transition = 'none'; // 禁止过渡，实时更新
+    // 隐藏文字并准备动画
+    const callBtnText = document.querySelector('.call-btn-text');
+    callBtnText.style.transition = 'none';
+    callBtnText.style.opacity = '0';
+    callBtnText.style.transform = 'translateX(-100%)';  // 让文字移出视图
+});
+
+// 触摸移动
+callBtnContainer.addEventListener('touchmove', (event) => {
+    if (!isSliding) return;
+    let deltaX = event.touches[0].clientX - startX;
+    if (deltaX >= 0) {
+        const width = Math.min(deltaX, 250); // 限制最大滑动距离
+        callBtnSlider.style.transform = `translateX(${width}px)`;  // 滑块移动
+        callBtnSlider.style.width = `${width}px`; // 调整滑块宽度
+    }
+});
+
+// 触摸结束
+callBtnContainer.addEventListener('touchend', () => {
+    if (isSliding) {
+        isSliding = false;
+        const deltaX = parseInt(callBtnSlider.style.transform.replace('translateX(', '').replace('px)', ''));
+
+        if (deltaX >= 250) {
+            // 如果滑动达到250px，触发拨打电话
+            callBtnContainer.classList.add('active');
+            callOwner();  // 执行拨打电话操作
+
+            // 触发恢复滑块原位
+            setTimeout(() => {
+                // 恢复滑块原位，并显示过渡效果
+                callBtnSlider.style.transition = 'transform 0.3s ease, width 0.3s ease';
+                callBtnSlider.style.transform = 'translateX(0)';
+                callBtnSlider.style.width = '50px';
+
+                // 恢复按钮文字，加入动态效果
+                const callBtnText = document.querySelector('.call-btn-text');
+                callBtnText.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                callBtnText.style.opacity = '1'; // 恢复按钮文字透明度
+                callBtnText.style.transform = 'translateX(0)';  // 文字从左滑入
+            }, 500); // 在拨打电话操作之后，500毫秒恢复滑块原位
+        } else {
+            // 否则，恢复滑块原位
+            callBtnSlider.style.transition = 'transform 0.3s ease, width 0.3s ease'; // 恢复过渡效果
+            callBtnSlider.style.transform = 'translateX(0)';
+            callBtnSlider.style.width = '50px'; // 恢复为初始宽度
+
+            // 恢复按钮文字，加入动态效果
+            const callBtnText = document.querySelector('.call-btn-text');
+            callBtnText.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+            callBtnText.style.opacity = '1'; // 恢复按钮文字透明度
+            callBtnText.style.transform = 'translateX(0)';  // 文字从左滑入
+        }
+    }
+});
+
+
+
+
+
+    </script>
+</body>
+</html>
