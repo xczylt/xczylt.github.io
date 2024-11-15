@@ -1,10 +1,8 @@
-        let isDarkMode = false;
-        let lastNotificationTime = 0; // 记录上次通知的时间
-        const phone = '17608462601';
-        const wxpusherAppToken = 'AT_42SgggbnnXdnm3gzQPiYcbShLGTRYFgh';
-        const wxpusherUIDs = ['UID_kJP2XxI6RxcVtjt4W3Ve1lRW5Zzp'];
-
-
+let isDarkMode = false;
+let lastNotificationTime = 0; // 记录上次通知的时间
+const phone = '17608462601';
+const wxpusherAppToken = 'AT_42SgggbnnXdnm3gzQPiYcbShLGTRYFgh';
+const wxpusherUIDs = ['UID_kJP2XxI6RxcVtjt4W3Ve1lRW5Zzp'];
 
 // 显示信息框
 function showInfoBox(type, message) {
@@ -20,7 +18,7 @@ function showInfoBox(type, message) {
 
     let displayTime = 5000;
     if (type ==='success' && message === '正在通知车主... 1') {
-        displayTime = 2000;
+        displayTime = 1000; // 将显示时间调整为1秒
     }
     setTimeout(() => {
         infoBox.classList.remove('show');
