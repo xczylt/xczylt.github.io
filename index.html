@@ -285,165 +285,6 @@
         }
 
     </style>
-    <style>
-    .call-btn-container {
-    position: relative;
-    width: 250px;
-    height: 50px;
-    background-color: #333;
-    border-radius: 25px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.call-btn-slider {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 100%;
-    background-color: gray;
-    border-radius: 25px;
-    transition: transform 0.3s ease, width 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.arrows-container {
-    display: flex;
-    justify-content: space-between;
-    width: 50px;
-}
-
-.arrow-left, .arrow-right {
-    font-size: 24px;
-    color: white;
-    opacity: 0;
-    animation: slide-arrows 1s infinite alternate;
-}
-
-/* 动画效果：箭头左右移动 */
-@keyframes slide-arrows {
-    0% {
-        transform: translateX(-10px);
-        opacity: 0.5;
-    }
-    100% {
-        transform: translateX(10px);
-        opacity: 1;
-    }
-}
-
-/* 当按钮处于活动状态时，改变箭头显示 */
-.call-btn-container.active .arrow-left {
-    animation: none; /* 停止动画 */
-    opacity: 0;
-}
-
-.call-btn-container.active .arrow-right {
-    animation: none; /* 停止动画 */
-    opacity: 0;
-}
-
-.call-btn-container.active .call-btn-text {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-    /* 拨打电话滑动按钮 */
-    .call-btn-container {
-        width: 100%;
-        height: 50px;
-        background-color: #ddd;
-        border-radius: 25px;
-        position: relative;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        overflow: hidden;
-        transition: background-color 0.3s ease;
-    }
-
-    .call-btn-text {
-        position: absolute;
-        left: 15px;
-        font-size: 16px;
-        color: #555;
-        transition: opacity 0.3s;
-        pointer-events: none;
-        text-align: center;
-        width: 100%;
-    }
-
-    .call-btn-slider {
-        width: 50px;
-        height: 100%;
-        background: linear-gradient(45deg, #17a2b8, #00bcd4);
-        border-radius: 25px;
-        position: absolute;
-        left: 0;
-        cursor: pointer;
-        transition: transform 0.3s ease, width 0.3s ease;
-    }
-
-    .call-btn-container.active .call-btn-slider {
-        transform: translateX(100%);
-        width: 100%;
-    }
-
-    .call-btn-container.active .call-btn-text {
-        opacity: 0;
-    }
-
-    /* 明显的光波发光效果 */
-    .call-btn-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(0, 188, 212, 0.6) 10%, rgba(0, 188, 212, 0) 50%);
-        border-radius: 25px;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        animation: lightWave 1.5s infinite;
-    }
-
-    .call-btn-container.active::before {
-        opacity: 1;
-    }
-
-    /* 光波的动画效果 */
-    @keyframes lightWave {
-        0% {
-            transform: scale(1);
-            opacity: 0.6;
-            box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
-        }
-        50% {
-            transform: scale(1.2);
-            opacity: 0.8;
-            box-shadow: 0 0 40px rgba(0, 188, 212, 1), 0 0 80px rgba(0, 188, 212, 0.6);
-        }
-        100% {
-            transform: scale(1);
-            opacity: 0.6;
-            box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
-        }
-    }
-
-    /* 增加按钮发光效果 */
-    .call-btn-container.active .call-btn-slider {
-        box-shadow: 0 0 15px rgba(0, 188, 212, 1), 0 0 30px rgba(0, 188, 212, 0.8);
-    }
-</style>
 </head>
 <body>
     <div class="container">
@@ -452,12 +293,6 @@
 
         <div class="button-group">
             <button class="notify-btn" id="notifyBtn" onclick="notifyOwnerWithCustomMessage()">通知车主</button>
-            <div class="call-btn-container" id="callBtnContainer">
-                <span class="call-btn-text">向右滑动拨打电话</span>
-                <div class="call-btn-slider" id="callBtnSlider"></div>
-                  <span class="arrow-left">←</span>
-                  <span class="arrow-right">→</span>
-            </div>
         </div>
     </div>
     <button class="toggle-dark-mode-btn" onclick="toggleDarkMode()">🌙</button>
@@ -504,8 +339,8 @@
         // 通知车主
         function notifyOwnerWithCustomMessage() {
             const currentTime = Date.now();
-            if (currentTime - lastNotificationTime < 12) { // 检查是否达到2分钟限制120000
-                const remainingTime = 12 - (currentTime - lastNotificationTime);
+            if (currentTime - lastNotificationTime < 120000) { // 检查是否达到2分钟限制120000
+                const remainingTime = 120000 - (currentTime - lastNotificationTime);
                 const minutes = Math.floor(remainingTime / 60000);
                 const seconds = Math.floor((remainingTime % 60000) / 1000);
                 showInfoBox('error', `请等待 ${minutes} 分 ${seconds} 秒 后再通知车主。`);
@@ -631,4 +466,5 @@ callBtnContainer.addEventListener('touchend', () => {
 
     </script>
 </body>
+    <link rel="stylesheet" href="1.css">
 </html>
