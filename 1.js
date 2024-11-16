@@ -77,7 +77,7 @@ function notifyOwner(messageToSend) {
   .then(response => response.json())
   .then(data => {
         if (data.code === 1000) {
-            showInfoBox('success', '已成功通知车主前来移车，请稍后等待！ 11');
+            showInfoBox('success', '已成功通知车主前来移车，给您带来不便深感歉意！！ 11');
             updateLastNotificationTime();
         } else {
             showInfoBox('error', `通知发送失败: ${data.msg || '未知错误 0'}`);
