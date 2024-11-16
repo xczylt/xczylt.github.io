@@ -19,7 +19,7 @@ function showInfoBox(type, message) {
 
     const displayTimeMap = {
         'success': {
-            '已成功通知车主前来移车，请稍后等待！ 11': 5000
+            '已成功通知车主前来移车，请稍后等待！ 11': 8000 // 将此处的显示时间调整为8000毫秒（8秒）
         }
     };
     const displayTime = displayTimeMap[type]?.[message] || 5000;
@@ -74,8 +74,8 @@ function notifyOwner(messageToSend) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bodyContent)
     })
-   .then(response => response.json())
-   .then(data => {
+  .then(response => response.json())
+  .then(data => {
         if (data.code === 1000) {
             showInfoBox('success', '已成功通知车主前来移车，请稍后等待！ 11');
             updateLastNotificationTime();
@@ -83,7 +83,7 @@ function notifyOwner(messageToSend) {
             showInfoBox('error', `通知发送失败: ${data.msg || '未知错误 0'}`);
         }
     })
-   .catch(error => {
+  .catch(error => {
         showInfoBox('error', `通知发送失败，请稍后重试。错误: ${error.message} 02`);
     });
 }
