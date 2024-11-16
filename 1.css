@@ -8,14 +8,14 @@
 body,
 html {
     font-family: 'Arial', sans-serif;
-    height: 100%;
+    min-height: 100vh; /* 使用视口高度单位，确保页面至少占满屏幕高度 */
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* 让头部、主体、页脚在垂直方向上分布 */
-    align-items: center; /* 水平居中对齐内部元素 */
+    align-items: center;
     padding: 0 15px;
     transition: background-color 0.3s, color 0.3s;
-    overflow: hidden; /* 禁止网页拖动 */
+    overflow-x: hidden; /* 禁止水平方向滚动条出现（如果内容溢出的话） */
 }
 
 /* 白天模式和夜间模式 */
@@ -33,27 +33,25 @@ body.dark-mode {
 .container {
     background-color: #ffffff;
     border-radius: 16px;
-    padding: 35px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 700px;
+    padding: 20px; /* 适当减小内边距，在小屏幕上更友好 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 减小阴影强度，视觉上更简洁 */
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-    min-width: 320px;
-    transition: background-color 0.3s, box-shadow 0.3s;
     margin-top: 120px; /* 设置顶部板块距离顶部的距离，高度为120px */
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 /* 夜间模式下容器 */
 .dark-mode.container {
     background-color: #333;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* 动态标题 */
 h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
+    font-size: 28px; /* 适当减小字号，适配手机屏幕 */
+    margin-bottom: 15px;
     font-weight: bold;
     animation: titleAnimation 3s ease-in-out infinite;
 }
@@ -64,7 +62,7 @@ h1 {
         color: #28a745;
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-5px); /* 减小上下移动幅度 */
         color: #007bff;
     }
     100% {
@@ -76,15 +74,15 @@ h1 {
 /* 输入框 */
 .input-box-textarea {
     width: 100%;
-    padding: 18px;
-    font-size: 20px;
-    border-radius: 10px;
+    padding: 12px; /* 减小内边距 */
+    font-size: 16px; /* 减小字号 */
+    border-radius: 8px; /* 减小圆角半径 */
     border: 1px solid #ccc;
     background: #f9f9f9;
     color: #333;
     resize: none;
-    min-height: 160px;
-    margin-bottom: 20px;
+    min-height: 120px; /* 减小最小高度 */
+    margin-bottom: 15px;
     box-sizing: border-box;
     transition: all 0.3s;
     outline: none;
@@ -101,29 +99,29 @@ body.dark-mode.input-box-textarea {
 .input-box-textarea:focus {
     border-color: #5d9bff;
     background-color: #fff;
-    box-shadow: 0 0 8px rgba(93, 155, 255, 0.5);
+    box-shadow: 0 0 6px rgba(93, 155, 255, 0.5); /* 减小阴影强度 */
 }
 
 .input-box-textarea.dark-mode:focus {
     background-color: #555;
     border-color: #66ccff;
-    box-shadow: 0 0 8px rgba(102, 204, 255, 0.5);
+    box-shadow: 0 0 6px rgba(102, 204, 255, 0.5);
 }
 
 .button-group {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    margin-top: 30px;
+    gap: 12px; /* 减小按钮间隔 */
+    margin-top: 20px;
 }
 
 .button-group button {
-    padding: 20px;
-    font-size: 22px;
+    padding: 15px; /* 减小按钮内边距 */
+    font-size: 18px; /* 减小字号 */
     font-weight: bold;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px; /* 减小圆角半径 */
     cursor: pointer;
     transition: background-color 0.5s, transform 0.3s, box-shadow 0.5s, filter 0.3s;
     display: flex;
@@ -143,8 +141,8 @@ body.dark-mode.input-box-textarea {
 
 .notify-btn:hover {
     background: linear-gradient(45deg, #3399ff, #66ccff);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px); /* 减小按钮按下时的位移 */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 减小阴影强度 */
     filter: brightness(1.2);
 }
 
@@ -156,9 +154,9 @@ body.dark-mode.input-box-textarea {
 /* 拨打电话滑动按钮 */
 .call-btn-container {
     width: 100%;
-    height: 50px;
+    height: 40px; /* 减小按钮高度 */
     background-color: #ddd;
-    border-radius: 25px;
+    border-radius: 20px; /* 减小圆角半径 */
     position: relative;
     box-sizing: border-box;
     display: flex;
@@ -170,8 +168,8 @@ body.dark-mode.input-box-textarea {
 
 .call-btn-text {
     position: absolute;
-    left: 15px;
-    font-size: 16px;
+    left: 12px; /* 调整位置 */
+    font-size: 14px; /* 减小字号 */
     color: #555;
     transition: opacity 0.3s;
     pointer-events: none;
@@ -180,10 +178,10 @@ body.dark-mode.input-box-textarea {
 }
 
 .call-btn-slider {
-    width: 50px;
+    width: 40px; /* 减小滑块宽度 */
     height: 100%;
     background: linear-gradient(45deg, #17a2b8, #00bcd4);
-    border-radius: 25px;
+    border-radius: 20px;
     position: absolute;
     left: 0;
     cursor: pointer;
@@ -208,7 +206,7 @@ body.dark-mode.input-box-textarea {
     width: 100%;
     height: 100%;
     background: radial-gradient(circle, rgba(0, 188, 212, 0.6) 10%, rgba(0, 188, 212, 0) 50%);
-    border-radius: 25px;
+    border-radius: 20px;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -224,23 +222,23 @@ body.dark-mode.input-box-textarea {
     0% {
         transform: scale(1);
         opacity: 0.6;
-        box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
+        box-shadow: 0 0 20px rgba(0, 188, 212, 1), 0 0 40px rgba(0, 188, 212, 0.8); /* 减小阴影强度 */
     }
     50% {
         transform: scale(1.2);
         opacity: 0.8;
-        box-shadow: 0 0 40px rgba(0, 188, 212, 1), 0 0 80px rgba(0, 188, 212, 0.6);
+        box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.6);
     }
     100% {
         transform: scale(1);
         opacity: 0.6;
-        box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.8);
+        box-shadow: 0 0 20px rgba(0, 188, 212, 1), 0 0 40px rgba(0, 188, 212, 0.8);
     }
 }
 
 /* 增加按钮发光效果 */
 .call-btn-container.active.call-btn-slider {
-    box-shadow: 0 0 15px rgba(0, 188, 212, 1), 0 0 30px rgba(0, 188, 212, 0.8);
+    box-shadow: 0 0 10px rgba(0, 188, 212, 1), 0 0 20px rgba(0, 188, 212, 0.8);
 }
 
 /* 信息框 */
@@ -250,12 +248,12 @@ body.dark-mode.input-box-textarea {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #ffffff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* 减小阴影强度 */
+    border-radius: 8px; /* 减小圆角半径 */
+    padding: 15px; /* 减小内边距 */
     z-index: 1000;
     display: none;
-    width: 300px;
+    width: 80%; /* 让宽度自适应屏幕，占比80% */
     text-align: center;
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -274,8 +272,8 @@ body.dark-mode.input-box-textarea {
 }
 
 .info-box.icon {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
 .info-box.icon.success::before {
@@ -289,7 +287,7 @@ body.dark-mode.input-box-textarea {
 }
 
 .info-box.message {
-    font-size: 20px;
+    font-size: 16px; /* 减小字号 */
     color: #333;
 }
 
@@ -300,9 +298,9 @@ body.dark-mode.input-box-textarea {
 
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
+    top: 8px; /* 调整位置 */
+    right: 8px;
+    font-size: 16px;
     cursor: pointer;
     color: #666;
 }
@@ -326,9 +324,9 @@ body.dark-mode.input-box-textarea {
 /* 夜间模式切换按钮 */
 .toggle-dark-mode-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
     cursor: pointer;
     background: transparent;
     border: none;
@@ -346,7 +344,7 @@ footer {
     background-color: #006400; /* 深绿色背景 */
     color: white; /* 白色字体 */
     width: 100%;
-    height: 150px; /* 固定高度150px */
+    height: 100px; /* 适当减小高度，在手机上更协调 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -354,4 +352,6 @@ footer {
 
 footer p {
     text-align: center;
+    font-size: 14px; /* 减小字号 */
+    padding: 0 15px; /* 适当添加内边距 */
 }
