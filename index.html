@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="1.css">
-    <title>通知车主挪车</title>
-</head>
-<body>
-    <div class="container">
-        <h1>通知车主挪车</h1>
-        <textarea id="customMessage" class="input-box-textarea" placeholder="可留下联系方式，方便车主联系您！可留空，默认发送信息给车主尽快前来移车！"></textarea>
 
-        <div class="button-group">
-            <button class="notify-btn" id="notifyBtn" onclick="notifyOwnerWithCustomMessage()">通知车主</button>
+<head>
+    <!-- 页面标题，简洁且包含核心关键词，利于 SEO -->
+    <title>通知车主挪车 - 便捷挪车通知服务</title>
+    <meta charset="UTF-8">
+    <!-- 确保页面在不同设备上正确显示，适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 提升搜索引擎兼容性 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 提供页面的简短描述，有助于搜索引擎理解页面内容，优化 SEO -->
+    <meta name="description" content="通过本页面，您可以方便快捷地通知车主前来挪车，可自定义留言内容，提高挪车沟通效率。">
+    <!-- 定义页面的关键词，帮助搜索引擎索引，可根据实际情况调整关键词 -->
+    <meta name="keywords" content="通知车主, 挪车, 挪车通知, 车主联系">
+    <!-- 使用 link 的 rel="preload" 进行懒加载指示，告诉浏览器稍后需要这个 CSS 文件，但不阻塞页面渲染 -->
+    <link rel="preload" href="1.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="1.css"></noscript>
+    <!-- 设置网站图标 -->
+    <link rel="icon" href="tainiu.png">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>通知车主挪车</h1>
         </div>
-    </div>
+    </header>
+    <main>
+        <div class="container">
+            <textarea id="customMessage" class="input-box-textarea" placeholder="可留下联系方式，方便车主联系您！可留空，默认发送信息给车主尽快前来移车！"></textarea>
+            <div class="button-group">
+                <button class="notify-btn" id="notifyBtn" onclick="notifyOwnerWithCustomMessage()">通知车主</button>
+            </div>
+        </div>
+    </main>
     <div class="info-box" id="infoBox">
         <span class="close-btn" onclick="closeInfoBox()">×</span>
         <div class="icon" id="infoBoxIcon"></div>
         <div class="message" id="infoBoxMessage"></div>
     </div>
-</body>
     <footer>
-    <script src="1.js"></script>
-        <link rel="shortcut icon" href="/tainiu.png">
+        <div class="container">
+            <!-- 可添加版权信息、联系信息等内容，丰富页面底部 -->
+            <p>&copy; xczylt - 挪车通知服务</p>
+        </div>
     </footer>
+    <!-- 使用 script 的 defer 属性来延迟加载 JavaScript 文件，直到文档解析完毕 -->
+    <script defer src="1.js"></script>
+</body>
+
 </html>
