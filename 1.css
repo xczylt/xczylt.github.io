@@ -1,129 +1,56 @@
-/* 全局样式重置 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* 全局加载状态类 */
+body.loading {
+    background-color: #f5f5f5; /* 浅灰色背景，表示正在加载 */
 }
 
-body,
-html {
-    font-family: 'Arial', sans-serif;
-    min-height: 100vh; /* 使用视口高度单位，确保页面至少占满屏幕高度 */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* 让头部、主体、页脚在垂直方向上分布 */
-    align-items: center;
-    padding: 0 15px;
-    transition: background-color 0.3s, color 0.3s;
-    overflow-x: hidden; /* 禁止水平方向滚动条出现（如果内容溢出的话） */
+body.loading * {
+    visibility: hidden; /* 隐藏所有元素内容 */
 }
 
-/* 白天模式和夜间模式 */
-body.light-mode {
-    background-color: #f0f4f8;
-    color: #333;
-}
-
-body.dark-mode {
-    background-color: #181818;
-    color: #f0f0f0;
-}
-
-/* 容器 */
-.container {
-    background-color: #ffffff;
+body.loading.container {
+    background-color: #ccc; /* 灰色骨架，用于显示容器的大致位置和形状 */
     border-radius: 16px;
-    padding: 20px; /* 适当减小内边距，在小屏幕上更友好 */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 减小阴影强度，视觉上更简洁 */
+    box-shadow: none; /* 去除阴影 */
+    padding: 20px;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-    margin-top: 0px; /* 设置顶部板块距离顶部的距离，高度为120px */
-    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 0px;
 }
 
-/* 夜间模式下容器 */
-.dark-mode.container {
-    background-color: #333;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* 动态标题 */
-h1 {
-    font-size: 28px; /* 适当减小字号，适配手机屏幕 */
+body.loading h1 {
+    font-size: 28px;
     margin-bottom: 15px;
     font-weight: bold;
-    animation: titleAnimation 3s ease-in-out infinite;
+    color: transparent; /* 隐藏标题文字 */
 }
 
-@keyframes titleAnimation {
-    0% {
-        transform: translateY(0);
-        color: #28a745;
-    }
-    50% {
-        transform: translateY(-5px); /* 减小上下移动幅度 */
-        color: #007bff;
-    }
-    100% {
-        transform: translateY(0);
-        color: #28a745;
-    }
-}
-
-/* 输入框 */
-.input-box-textarea {
+body.loading.input-box-textarea {
     width: 100%;
-    padding: 12px; /* 减小内边距 */
-    font-size: 16px; /* 减小字号 */
-    border-radius: 8px; /* 减小圆角半径 */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    background: #f9f9f9;
-    color: #333;
+    background: #ccc; /* 灰色输入框骨架 */
+    color: transparent; /* 隐藏输入框文字 */
     resize: none;
-    min-height: 120px; /* 减小最小高度 */
+    min-height: 120px;
     margin-bottom: 15px;
     box-sizing: border-box;
-    transition: all 0.3s;
     outline: none;
     overflow: hidden;
 }
 
-/* 夜间模式下输入框 */
-body.dark-mode.input-box-textarea {
-    background: #444;
-    color: #f0f0f0;
-    border: 1px solid #666;
-}
-
-.input-box-textarea:focus {
-    border-color: #5d9bff;
-    background-color: #fff;
-    box-shadow: 0 0 6px rgba(93, 155, 255, 0.5); /* 减小阴影强度 */
-}
-
-.input-box-textarea.dark-mode:focus {
-    background-color: #555;
-    border-color: #66ccff;
-    box-shadow: 0 0 6px rgba(102, 204, 255, 0.5);
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* 减小按钮间隔 */
-    margin-top: 20px;
-}
-
-.button-group button {
-    padding: 15px; /* 减小按钮内边距 */
-    font-size: 18px; /* 减小字号 */
+body.loading.button-group button {
+    padding: 15px;
+    font-size: 18px;
     font-weight: bold;
-    color: white;
+    color: transparent; /* 隐藏按钮文字 */
     border: none;
-    border-radius: 8px; /* 减小圆角半径 */
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.5s, transform 0.3s, box-shadow 0.5s, filter 0.3s;
+    background: #ccc; /* 灰色按钮骨架 */
+    transition: none; /* 去除过渡效果 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,226 +59,38 @@ body.dark-mode.input-box-textarea {
     overflow: hidden;
 }
 
-/* 通知车主按钮背景修改为浅蓝色渐变 */
-.notify-btn {
-    background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
-    background-size: 200% 100%;
-    transition: background-color 0.3s;
-}
-
-.notify-btn:hover {
-    background: linear-gradient(45deg, #3399ff, #66ccff);
-    transform: translateY(-3px); /* 减小按钮按下时的位移 */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* 减小阴影强度 */
-    filter: brightness(1.2);
-}
-
-/* 夜间模式按钮 */
-.dark-mode.notify-btn {
-    background: linear-gradient(90deg, #66ccff 50%, #3399ff 50%);
-}
-
-/* 拨打电话滑动按钮 */
-.call-btn-container {
-    width: 100%;
-    height: 40px; /* 减小按钮高度 */
-    background-color: #ddd;
-    border-radius: 20px; /* 减小圆角半径 */
-    position: relative;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    transition: background-color 0.3s ease;
-}
-
-.call-btn-text {
-    position: absolute;
-    left: 12px; /* 调整位置 */
-    font-size: 14px; /* 减小字号 */
-    color: #555;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    text-align: center;
-    width: 100%;
-}
-
-.call-btn-slider {
-    width: 40px; /* 减小滑块宽度 */
-    height: 100%;
-    background: linear-gradient(45deg, #17a2b8, #00bcd4);
-    border-radius: 20px;
-    position: absolute;
-    left: 0;
-    cursor: pointer;
-    transition: transform 0.3s ease, width 0.3s ease;
-}
-
-.call-btn-container.active.call-btn-slider {
-    transform: translateX(100%);
-    width: 100%;
-}
-
-.call-btn-container.active.call-btn-text {
-    opacity: 0;
-}
-
-/* 明显的光波发光效果 */
-.call-btn-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(0, 188, 212, 0.6) 10%, rgba(0, 188, 212, 0) 50%);
-    border-radius: 20px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    animation: lightWave 1.5s infinite;
-}
-
-.call-btn-container.active::before {
-    opacity: 1;
-}
-
-/* 光波的动画效果 */
-@keyframes lightWave {
-    0% {
-        transform: scale(1);
-        opacity: 0.6;
-        box-shadow: 0 0 20px rgba(0, 188, 212, 1), 0 0 40px rgba(0, 188, 212, 0.8); /* 减小阴影强度 */
-    }
-    50% {
-        transform: scale(1.2);
-        opacity: 0.8;
-        box-shadow: 0 0 30px rgba(0, 188, 212, 1), 0 0 60px rgba(0, 188, 212, 0.6);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 0.6;
-        box-shadow: 0 0 20px rgba(0, 188, 212, 1), 0 0 40px rgba(0, 188, 212, 0.8);
-    }
-}
-
-/* 增加按钮发光效果 */
-.call-btn-container.active.call-btn-slider {
-    box-shadow: 0 0 10px rgba(0, 188, 212, 1), 0 0 20px rgba(0, 188, 212, 0.8);
-}
-
-/* 信息框 */
-.info-box {
+body.loading.info-box {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* 减小阴影强度 */
-    border-radius: 8px; /* 减小圆角半径 */
-    padding: 15px; /* 减小内边距 */
+    background-color: #ccc; /* 灰色信息框骨架 */
+    box-shadow: none; /* 去除阴影 */
+    border-radius: 8px;
+    padding: 15px;
     z-index: 1000;
     display: none;
-    width: 80%; /* 让宽度自适应屏幕，占比80% */
+    width: 80%;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: none; /* 去除过渡效果 */
 }
 
-/* 夜间模式下信息框 */
-.dark-mode.info-box {
-    background-color: #333;
-    color: #f0f0f0;
-}
-
-.info-box.show {
-    display: block;
-    opacity: 1;
-    animation: fadeIn 1s forwards;
-}
-
-.info-box.icon {
-    font-size: 20px;
-    margin-bottom: 8px;
-}
-
-.info-box.icon.success::before {
-    content: '✓';
-    color: #28a745;
-}
-
-.info-box.icon.error::before {
-    content: '✖';
-    color: #dc3545;
-}
-
-.info-box.message {
-    font-size: 16px; /* 减小字号 */
-    color: #333;
-}
-
-/* 夜间模式下提示信息 */
-.dark-mode.info-box.message {
-    color: #f0f0f0;
-}
-
-.close-btn {
+body.loading.close-btn {
     position: absolute;
-    top: 8px; /* 调整位置 */
+    top: 8px;
     right: 8px;
     font-size: 16px;
+    color: transparent; /* 隐藏关闭按钮 */
     cursor: pointer;
-    color: #666;
 }
 
-/* 夜间模式下关闭按钮 */
-.dark-mode.close-btn {
-    color: #ccc;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
-
-/* 夜间模式切换按钮 */
-.toggle-dark-mode-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    color: #f0f0f0;
-    /* 更明显的颜色 */
-    transition: color 0.3s;
-}
-
-.dark-mode.toggle-dark-mode-btn {
-    color: #f0f0f0;
-}
-
-/* 页脚样式 */
-footer {
-    background-color: #006400; /* 深绿色背景 */
-    color: white; /* 白色字体 */
+body.loading.footer {
+    background-color: #ccc; /* 灰色页脚骨架 */
+    color: transparent; /* 隐藏页脚文字 */
     width: 100%;
-    height: 100px; /* 适当减小高度，在手机上更协调 */
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-footer p {
-    text-align: center;
-    font-size: 14px; /* 减小字号 */
-    padding: 0 15px; /* 适当添加内边距 */
 }
