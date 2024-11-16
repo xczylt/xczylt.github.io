@@ -38,7 +38,7 @@ body.dark-mode {
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-    margin-top: 120px; /* 设置顶部板块距离顶部的距离，高度为120px */
+    margin-top: 0px; /* 设置顶部板块距离顶部的距离，高度为120px */
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
