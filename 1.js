@@ -92,3 +92,7 @@ function notifyOwner(messageToSend) {
 function updateLastNotificationTime() {
     lastNotificationTime = Date.now();
 }
+
+window.addEventListener('load', function () {
+    document.body.classList.remove('loading');
+});
